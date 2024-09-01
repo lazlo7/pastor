@@ -1,13 +1,19 @@
-from fastapi import FastAPI
+from pastor.dependencies import get_templates
+from pastor.paste.routes import router as paste_router
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 import uvicorn
 
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="pastor/static"), name="static")
+app.include_router(paste_router)
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello world"}
+@app.exception_handler(404)
+async def custom_404_handler(req: Request, _):
+    t = get_templates()
+    return t.TemplateResponse("404.html", {"request": req}, status_code=404)
 
 
 def start():

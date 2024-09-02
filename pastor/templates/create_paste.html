@@ -5,9 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ url_for('static', path='/img/favicon.jpg') }}" type="image/x-icon"/>
     <title>pastor: create paste</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 20px);
+            margin: 10px;
+        }
+        .title {
+            font-size: 1.5rem;
+            font-weight: lighter;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .text-button {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+        #paste {
+            font-family: monospace;
+            font-size: 1rem;
+            flex-grow: 1;
+            width: 100%;
+            resize: none;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 <body>
-    <h1>pastor</h1>
-    <p>creating paste ui goes here...</p>
+    <div class="header">
+        <h1 class="title">pastor: create paste</h1>
+        <form id="createPasteForm" action="/" method="POST">
+            <span>[</span><a class="text-button" onclick="createPaste()">create paste</a><span>]</span>
+        </form>
+    </div>
+    <textarea name="paste" id="paste"></textarea>
+    <script>
+        function createPaste() {
+            const pasteText = document.getElementById('paste').value; 
+            fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain; charset=utf-8',
+                },
+                body: pasteText
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.paste_id) {
+                    window.location.href = `/${data.paste_id}`;
+                } else {
+                    alert('Error: Paste ID not received');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
 </body>
 </html>

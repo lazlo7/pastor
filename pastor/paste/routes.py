@@ -1,6 +1,8 @@
+from pastor.dependencies import get_templates
 from pastor.paste.controller import PasteController
 from pastor.paste.dependencies import get_controller
 from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi.templating import Jinja2Templates
 from fastapi.responses import PlainTextResponse
 
 
@@ -26,8 +28,9 @@ async def post_paste(r: Request,
 
 
 @router.get("/")
-async def get_root():
-    return {"message": "hello!"}
+async def get_root(r: Request, 
+                   t: Jinja2Templates = Depends(get_templates)):
+    return t.TemplateResponse("create_paste.html", {"request": r})
 
 
 # TODO: add existing route paths to seqid blocklist to avoid collisions.

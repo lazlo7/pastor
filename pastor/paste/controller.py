@@ -41,6 +41,7 @@ class PasteController:
 
     @staticmethod
     def is_paste_id_valid(paste_id: str) -> bool:
+        # TODO: can be optimized: check character code ranges.
         return all(c in PasteController.__alphabet for c in paste_id) and \
                len(paste_id) >= PasteController.__id_min_length
 

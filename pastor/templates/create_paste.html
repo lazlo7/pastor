@@ -14,7 +14,7 @@
             margin: 10px;
         }
         .title {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: lighter;
         }
         .header {
@@ -25,7 +25,6 @@
         .text-button {
             cursor: pointer;
             color: blue;
-            text-decoration: underline;
         }
         #paste {
             font-family: monospace;
@@ -40,12 +39,12 @@
 </head>
 <body>
     <div class="header">
-        <h1 class="title">pastor: create paste</h1>
+        <h1 class="title">pastor</h1>
         <form id="createPasteForm" action="/" method="POST">
             <span>[</span><a class="text-button" onclick="createPaste()">create paste</a><span>]</span>
         </form>
     </div>
-    <textarea name="paste" id="paste"></textarea>
+    <textarea name="paste" id="paste" placeholder="type text here..."></textarea>
     <script>
         function createPaste() {
             const pasteText = document.getElementById('paste').value; 

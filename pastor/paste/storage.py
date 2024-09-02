@@ -3,10 +3,10 @@ from abc import ABC, abstractmethod
 
 class Storage(ABC):
     @abstractmethod
-    def read(self, paste_id: str) -> str | None:
+    def read(self, key: str) -> str | None:
         pass
 
 
     @abstractmethod
-    def write(self, paste_id: str, text: str):
+    def write(self, key: str, value: str):
         pass

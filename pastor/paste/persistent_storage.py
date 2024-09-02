@@ -7,28 +7,29 @@ class PersistentStorage(Storage):
         self.__path = path
 
 
-    def __get_paste_path(self, paste_id: str) -> str:
-        return os.path.join(self.__path, paste_id) 
+    def __get_key_path(self, key: str) -> str:
+        return os.path.join(self.__path, key) 
 
 
-    def read(self, paste_id: str) -> str | None:
+    def read(self, key: str) -> str | None:
         """
-        Returns the content of a paste.
-        It is assumed that the paste_id has been sanitized.
+        Returns the content of a key.
+        It is assumed that the key has been sanitized.
         """
-        paste_path = self.__get_paste_path(paste_id)
+        key_path = self.__get_key_path(key)
         try:
-            with open(paste_path, "r") as f:
+            with open(key_path, "r") as f:
                 return f.read()
         except:
             return None
 
 
-    def write(self, paste_id: str, text: str):
+    def write(self, key: str, value: str):
         """
-        writes the content of a paste.
-        It is assumed that the paste_id has been sanitized.
+        writes the content of a key.
+        It is assumed that the key has been sanitized.
         """
-        paste_path = self.__get_paste_path(paste_id)
-        with open(paste_path, "w") as f:
-            f.write(text)
+        os.makedirs(self.__path, exist_ok=True)
+        key_path = self.__get_key_path(key)
+        with open(key_path, "w") as f:
+            f.write(str(value))

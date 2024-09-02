@@ -37,14 +37,10 @@ async def get_root(r: Request,
 @router.get("/{paste_id}")
 async def get_paste(paste_id: str, 
                     c: PasteController = Depends(get_controller)):
-    if not PasteController.is_paste_id_valid(paste_id):
-        raise HTTPException(status_code=400, 
-                            detail="invalid paste id")
-
-    paste = c.get_paste(paste_id)
-    if paste is None:
-        raise HTTPException(status_code=404, 
-                            detail="paste not found")
-    
-    # TODO: use StreamingResponse to better handle large pastes.
-    return PlainTextResponse(content=paste)
+    if PasteController.is_paste_id_valid(paste_id):
+        paste = c.get_paste(paste_id)
+        if paste is not None:
+            # TODO: use StreamingResponse to better handle large pastes.
+            return PlainTextResponse(content=paste)
+            
+    raise HTTPException(status_code=404)

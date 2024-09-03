@@ -16,11 +16,11 @@ async def post_paste(r: Request,
     # No need to save empty pastes.
     if not body_bytes:
         raise HTTPException(status_code=400, 
-                            detail="empty paste")
+                            detail="paste is empty")
     # Limit the size to preserve disk space.
     if len(body_bytes) > 4096:
         raise HTTPException(status_code=400, 
-                            detail="paste too long (max 4096 bytes)")
+                            detail="paste too long")
     
     text = body_bytes.decode("utf-8")
     paste_id = c.create_paste(text)

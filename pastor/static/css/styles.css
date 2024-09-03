@@ -1,0 +1,41 @@
+body * {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+body {
+    max-width: 210mm;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 20px);
+    margin: 0 auto;
+    padding: 10px;
+}
+.title {
+    font-size: 20px;
+    font-weight: lighter;
+}
+.header {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-actions {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 10px;
+    justify-content: flex-end;
+    align-items: center;
+}
+.text-button {
+    cursor: pointer;
+    color: blue;
+}
+#error-container {
+    color: red;
+    font-weight: bolder;
+}
+#paste {
+    font-family: monospace;
+    flex-grow: 1;
+}

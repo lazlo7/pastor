@@ -4,10 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ url_for('static', path='/img/favicon.jpg') }}" type="image/x-icon"/>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}" type="text/css"/>
     <title>pastor</title>
 </head>
 <body>
-    <h1>pastor</h1>
-    <p>browsing paste ui goes here...</p>
+    <div class="header">
+        <h1 class="title">pastor</h1>
+        <div class="header-actions">
+            <div>
+                <span>[</span><a href="/raw/{{ paste_id }}" class="text-button">raw</a><span>]</span>
+            </div>
+            <div>
+                <span>[</span><a href="/download/{{ paste_id }}" class="text-button">download</a><span>]</span>
+            </div>
+        </div>
+    </div>
+    <textarea name="paste" id="paste" readonly>{{ paste }}</textarea>
 </body>
 </html>

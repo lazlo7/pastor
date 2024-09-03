@@ -3,7 +3,6 @@ from pastor.paste.controller import PasteController
 from pastor.paste.dependencies import get_controller
 from fastapi import APIRouter, HTTPException, Request, Depends
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import PlainTextResponse
 
 
 router = APIRouter()
@@ -35,12 +34,14 @@ async def get_root(r: Request,
 
 # TODO: add existing route paths to seqid blocklist to avoid collisions.
 @router.get("/{paste_id}")
-async def get_paste(paste_id: str, 
-                    c: PasteController = Depends(get_controller)):
+async def get_paste(paste_id: str,
+                    r: Request, 
+                    c: PasteController = Depends(get_controller),
+                    t: Jinja2Templates = Depends(get_templates)):
     if PasteController.is_paste_id_valid(paste_id):
         paste = c.get_paste(paste_id)
         if paste is not None:
-            # TODO: use StreamingResponse to better handle large pastes.
-            return PlainTextResponse(content=paste)
+            return t.TemplateResponse("read_paste.html", 
+                                      {"request": r, "paste": paste, "paste_id": paste_id})
             
     raise HTTPException(status_code=404)

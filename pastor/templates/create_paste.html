@@ -6,19 +6,26 @@
     <link rel="icon" href="{{ url_for('static', path='/img/favicon.jpg') }}" type="image/x-icon"/>
     <title>pastor: create paste</title>
     <style>
-        body {
+        body * {
             font-family: Arial, sans-serif;
+            font-size: 16px;
+        }
+        body {
+            max-width: 210mm;
             display: flex;
             flex-direction: column;
             height: calc(100vh - 20px);
-            margin: 10px;
+            margin: 0 auto;
+            padding: 10px;
         }
         .title {
-            font-size: 1.4rem;
+            font-size: 20px;
             font-weight: lighter;
         }
         .header {
             display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
         }
@@ -26,20 +33,20 @@
             cursor: pointer;
             color: blue;
         }
+        #error-container {
+            color: red;
+            font-weight: bolder;
+        }
         #paste {
             font-family: monospace;
-            font-size: 1rem;
             flex-grow: 1;
-            width: 100%;
-            resize: none;
-            padding: 10px;
-            box-sizing: border-box;
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1 class="title">pastor</h1>
+        <span id="error-container"></span>
         <form id="createPasteForm" action="/" method="POST">
             <span>[</span><a class="text-button" onclick="createPaste()">create paste</a><span>]</span>
         </form>
@@ -57,13 +64,18 @@
             })
             .then(response => response.json())
             .then(data => {
-                if(data.paste_id) {
-                    window.location.href = `/${data.paste_id}`;
-                } else {
-                    alert('Error: Paste ID not received');
+                if (data.detail) {
+                    throw new Error(data.detail);
                 }
+                if(!data.paste_id) {
+                    throw new Error('internal server error');
+                }
+                window.location.href = `/${data.paste_id}`;
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => displayError(error));
+        }
+        function displayError(error) {
+            document.getElementById('error-container').innerText = error.message;
         }
     </script>
 </body>

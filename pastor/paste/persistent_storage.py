@@ -3,6 +3,10 @@ import os.path
 
 
 class PersistentStorage(Storage):
+    # TODO: current implementation allows for only 65536 pastes
+    # because one directory can only have that many files.
+    # Might want to split pastes into different subdirectories 
+    # (but how to find a paste then?)
     def __init__(self, path: str):
         self.__path = path
 

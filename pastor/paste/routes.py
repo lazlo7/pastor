@@ -64,6 +64,7 @@ async def download_paste(paste_id: str,
     if PasteController.is_paste_id_valid(paste_id):
         paste = c.get_paste(paste_id)
         if paste is not None:
-            return PlainTextResponse(paste, headers={"Content-Disposition": f"attachment; filename={paste_id}.txt"})
+            headers = {"Content-Disposition": f"attachment; filename={paste_id}.txt"}
+            return PlainTextResponse(paste, headers=headers)
     
     raise HTTPException(status_code=404)

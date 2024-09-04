@@ -1,0 +1,19 @@
+services:
+  pastor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${APP_WEB_PORT}:8000"
+    volumes:
+      - "storage:${APP_PASTE_STORAGE_PATH}"
+    env_file:
+      - .env
+
+volumes:
+  storage:
+    driver: local
+    driver_opts:
+      o: "size=${APP_PASTE_STORAGE_SIZE}"
+      device: tmpfs
+      type: tmpfs

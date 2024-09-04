@@ -13,6 +13,7 @@ body {
 .title {
     font-size: 20px;
     font-weight: lighter;
+    color: black;
 }
 .header {
     display: flex;
@@ -27,9 +28,12 @@ body {
     justify-content: flex-end;
     align-items: center;
 }
-.text-button {
+.royalblue {
+    color: royalblue;
+}
+.link {
     cursor: pointer;
-    color: blue;
+    text-decoration: none;
 }
 #error-container {
     color: red;

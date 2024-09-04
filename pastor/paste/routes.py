@@ -1,6 +1,7 @@
 from pastor.dependencies import get_templates
 from pastor.paste.controller import PasteController
 from pastor.paste.dependencies import get_controller
+from pastor.paste.utils import validate_paste
 from fastapi import APIRouter, HTTPException, Request, Depends
 from fastapi.responses import PlainTextResponse
 from fastapi.templating import Jinja2Templates
@@ -14,17 +15,13 @@ router = APIRouter()
 async def post_paste(r: Request, 
                      c: PasteController = Depends(get_controller)):
     body_bytes = await r.body()
-    # No need to save empty pastes.
-    if not body_bytes:
-        raise HTTPException(status_code=400, 
-                            detail="paste is empty")
-    # Limit the size to preserve disk space.
-    if len(body_bytes) > 4096:
-        raise HTTPException(status_code=400, 
-                            detail="paste too long")
+    validate_paste(body_bytes)
     
-    text = body_bytes.decode("utf-8")
+    text = body_bytes.decode("utf-8", errors="ignore")
     sanitized_text = nh3.clean(text)
+
+    # Just to be sure, revalidate the paste after sanitization.
+    validate_paste(sanitized_text)
     paste_id = c.create_paste(sanitized_text)
     return {"paste_id": paste_id}
 

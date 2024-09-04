@@ -1,9 +1,10 @@
-from fastapi.responses import PlainTextResponse
 from pastor.dependencies import get_templates
 from pastor.paste.controller import PasteController
 from pastor.paste.dependencies import get_controller
 from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi.responses import PlainTextResponse
 from fastapi.templating import Jinja2Templates
+import nh3
 
 
 router = APIRouter()
@@ -23,7 +24,8 @@ async def post_paste(r: Request,
                             detail="paste too long")
     
     text = body_bytes.decode("utf-8")
-    paste_id = c.create_paste(text)
+    sanitized_text = nh3.clean(text)
+    paste_id = c.create_paste(sanitized_text)
     return {"paste_id": paste_id}
 
 

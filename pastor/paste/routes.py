@@ -57,3 +57,14 @@ async def get_paste_raw(paste_id: str,
             return PlainTextResponse(paste)
     
     raise HTTPException(status_code=404)
+
+
+@router.get("/download/{paste_id}")
+async def download_paste(paste_id: str,
+                         c: PasteController = Depends(get_controller)):
+    if PasteController.is_paste_id_valid(paste_id):
+        paste = c.get_paste(paste_id)
+        if paste is not None:
+            return PlainTextResponse(paste, headers={"Content-Disposition": f"attachment; filename={paste_id}.txt"})
+    
+    raise HTTPException(status_code=404)

@@ -6,7 +6,6 @@ Simple text-sharing service
 Create a `.env` file in the root directory and set environment variables:
 - `APP_WEB_PORT`: port for the web server (used only by docker)
 - `APP_PASTE_STORAGE_PATH`: path to the directory where pastes are stored
-- `APP_PASTE_STORAGE_SIZE`: size of a volume mounted to the storage path (used only by docker) 
 
 An example is provided in the `.env.example` file 
 

@@ -7,6 +7,7 @@ class PersistentStorage(Storage):
     # because one directory can only have that many files.
     # Might want to split pastes into different subdirectories 
     # (but how to find a paste then?)
+    # TODO: implement some sort of disk quota for pastes.
     def __init__(self, path: str):
         self.__path = path
 

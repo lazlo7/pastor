@@ -11,6 +11,12 @@ import nh3
 router = APIRouter()
 
 
+@router.get("/")
+async def get_root(r: Request, 
+                   t: Jinja2Templates = Depends(get_templates)):
+    return t.TemplateResponse("create_paste.html", {"request": r})
+
+
 @router.post("/", status_code=201)
 async def post_paste(r: Request, 
                      db: Session = Depends(get_db)):
@@ -24,12 +30,6 @@ async def post_paste(r: Request,
     validate_paste(sanitized_text)
     paste_id = await create_paste(sanitized_text, db)
     return {"paste_id": paste_id}
-
-
-@router.get("/")
-async def get_root(r: Request, 
-                   t: Jinja2Templates = Depends(get_templates)):
-    return t.TemplateResponse("create_paste.html", {"request": r})
 
 
 # TODO: add existing route paths to seqid blocklist to avoid collisions.

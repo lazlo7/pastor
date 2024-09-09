@@ -23,7 +23,6 @@ def is_paste_id_valid(paste_id: str) -> bool:
     """
     Checks that a given string can be a valid paste id.
     """
-    # TODO: can be optimized: check character code ranges.
     # Note that the fact that paste_id contains only base64 characters
     # is already checked by the sqids.decode() function.
     if len(paste_id) < SQIDS_ID_MIN_LENGTH:

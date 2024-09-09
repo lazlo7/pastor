@@ -1,3 +1,4 @@
+from pastor.database import init_db
 from pastor.dependencies import get_templates
 from pastor.paste.routes import router as paste_router
 from fastapi import FastAPI, Request
@@ -22,6 +23,9 @@ async def custom_404_handler(req: Request, _):
 
 
 app.include_router(paste_router)
+
+# TODO: is there a better architectural way to initialize db?
+init_db()
 
 
 def start():

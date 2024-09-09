@@ -1,11 +1,5 @@
-from pastor.paste.controller import PasteController
-from pastor.paste.persistent_storage import PersistentStorage
-from pastor.config import APP_PASTE_STORAGE_PATH
+from pastor.paste.constants import BASE64_ALPHABET, SQIDS_ID_MIN_LENGTH
+from sqids import sqids
 
 
-storage = PersistentStorage(path=APP_PASTE_STORAGE_PATH)
-controller = PasteController(storage)
-
-
-def get_controller() -> PasteController: 
-    return controller
+sqids = sqids.Sqids(alphabet=BASE64_ALPHABET, min_length=SQIDS_ID_MIN_LENGTH)

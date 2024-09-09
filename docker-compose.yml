@@ -6,9 +6,18 @@ services:
     ports:
       - "${APP_WEB_PORT}:8000"
     volumes:
-      - "storage:${APP_PASTE_STORAGE_PATH}"
+      - "seqid:${APP_SEQID_PATH}"
     env_file:
       - .env
+  
+  postgres:
+    image: postgres:latest
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
 volumes:
-  storage:
+  seqid:

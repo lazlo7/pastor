@@ -1,7 +1,9 @@
 from pastor.dependencies import get_templates, get_db
-from pastor.paste.utils import validate_paste, is_paste_id_valid
-from pastor.paste.service import get_paste, create_paste
-from fastapi import APIRouter, HTTPException, Request, Depends
+from pastor.paste.dependencies import valid_paste_id
+from pastor.paste.utils import validate_paste
+from pastor.paste.service import create_paste
+from typing import Any
+from fastapi import APIRouter, Request, Depends
 from fastapi.responses import PlainTextResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -33,39 +35,22 @@ async def post_paste(r: Request,
 
 
 # TODO: add existing route paths to seqid blocklist to avoid collisions.
-# TODO: maybe di is_paste_id_valid() for paste_id?
 @router.get("/{paste_id}")
-async def get_paste_(paste_id: str,
-                     r: Request, 
-                     db: Session = Depends(get_db),
-                     t: Jinja2Templates = Depends(get_templates)):
-    if is_paste_id_valid(paste_id):
-        paste = await get_paste(paste_id, db)
-        if paste is not None:
-            return t.TemplateResponse("read_paste.html", 
-                                      {"request": r, "paste": paste, "paste_id": paste_id})
-            
-    raise HTTPException(status_code=404)
+async def get_paste(r: Request,
+                    paste: dict[str, Any] = Depends(valid_paste_id), 
+                    t: Jinja2Templates = Depends(get_templates)):
+    return t.TemplateResponse("read_paste.html", 
+                              {"request": r, 
+                               "paste": paste["text"], 
+                               "paste_id": paste["id"]})
 
 
 @router.get("/raw/{paste_id}")
-async def get_paste_raw(paste_id: str,
-                        db: Session = Depends(get_db)):
-    if is_paste_id_valid(paste_id):
-        paste = await get_paste(paste_id, db)
-        if paste is not None:
-            return PlainTextResponse(paste)
-    
-    raise HTTPException(status_code=404)
+async def get_paste_raw(paste: dict[str, Any] = Depends(valid_paste_id)):
+    return PlainTextResponse(paste["text"])
 
 
 @router.get("/download/{paste_id}")
-async def download_paste(paste_id: str,
-                         db: Session = Depends(get_db)):
-    if is_paste_id_valid(paste_id):
-        paste = await get_paste(paste_id, db)
-        if paste is not None:
-            headers = {"Content-Disposition": f"attachment; filename={paste_id}.txt"}
-            return PlainTextResponse(paste, headers=headers)
-    
-    raise HTTPException(status_code=404)
+async def download_paste(paste: dict[str, Any] = Depends(valid_paste_id)):
+    headers = {"Content-Disposition": f"attachment; filename={paste["id"]}.txt"}
+    return PlainTextResponse(paste["text"], headers=headers)

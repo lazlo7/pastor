@@ -11,8 +11,10 @@ POSTGRES_DB       = config("POSTGRES_DB", default="pastor")
 POSTGRES_PASSWORD = config("POSTGRES_PASSWORD", default="YOUR_DATABASE_PASSWORD")
 
 # TODO: add ability to explicitly set dsn.
-DATABASE_DSN = "postgresql://{user}:{password}@{host}:{port}/{name}".format(POSTGRES_USER, 
-                                                                            POSTGRES_PASSWORD, 
-                                                                            POSTGRES_HOST, 
-                                                                            POSTGRES_PORT, 
-                                                                            POSTGRES_DB)
+DATABASE_DSN = "postgresql+psycopg://{user}:{password}@{host}:{port}/{name}".format(
+    user=POSTGRES_USER, 
+    password=POSTGRES_PASSWORD, 
+    host=POSTGRES_HOST, 
+    port=POSTGRES_PORT, 
+    name=POSTGRES_DB
+)

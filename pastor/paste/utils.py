@@ -1,8 +1,11 @@
 from pastor.config import APP_SEQID_PATH
-from pastor.paste.constants import SQIDS_ID_MIN_LENGTH
-from pastor.paste.dependencies import sqids
+from pastor.paste.constants import BASE64_ALPHABET, SQIDS_ID_MIN_LENGTH
 from typing import Tuple
 from fastapi import HTTPException
+from sqids import sqids as sqids_
+
+
+sqids = sqids_.Sqids(alphabet=BASE64_ALPHABET, min_length=SQIDS_ID_MIN_LENGTH)
 
 
 def validate_paste(paste: bytes | str) -> None:
@@ -17,22 +20,6 @@ def validate_paste(paste: bytes | str) -> None:
     if len(paste) > 4096:
         raise HTTPException(status_code=400, 
                             detail="paste too long")
-
-
-def is_paste_id_valid(paste_id: str) -> bool:
-    """
-    Checks that a given string can be a valid paste id.
-    """
-    # Note that the fact that paste_id contains only base64 characters
-    # is already checked by the sqids.decode() function.
-    if len(paste_id) < SQIDS_ID_MIN_LENGTH:
-        return False
-    
-    decoded_id = sqids.decode(paste_id)
-    # Since sqids.decode() may return the same integer id for multiple ids,
-    # we need to check that the decoded id is actually the same as the encoded one.
-    return len(decoded_id) == 1 and \
-           sqids.encode([decoded_id[0]]) == paste_id
         
 
 def load_seq_id() -> int:

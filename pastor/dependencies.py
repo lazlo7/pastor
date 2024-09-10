@@ -19,5 +19,6 @@ def get_db() -> Generator[Session, None, None]:
         db.rollback()
         # TODO: add proper logging.
         print("[db error]: ", e)
+        raise e
     finally:
         db.close()

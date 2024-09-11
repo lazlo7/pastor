@@ -28,13 +28,19 @@
                 },
                 body: pasteText
             })
-            .then(response => response.json())
+            .then(response => {
+                // check for 5xx server errors
+                if (response.status >= 500) {
+                    throw new Error('internal server error, try again later');
+                }
+                return response.json()
+            })
             .then(data => {
                 if (data.detail) {
                     throw new Error(data.detail);
                 }
                 if(!data.paste_id) {
-                    throw new Error('internal server error');
+                    throw new Error('internal server error, try again later');
                 }
                 window.location.href = `/${data.paste_id}`;
             })

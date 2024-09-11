@@ -3,9 +3,11 @@ from pastor.paste.constants import BASE64_ALPHABET, SQIDS_ID_MIN_LENGTH
 from typing import Tuple
 from fastapi import HTTPException
 from sqids import sqids as sqids_
+from os import path
 
 
 sqids = sqids_.Sqids(alphabet=BASE64_ALPHABET, min_length=SQIDS_ID_MIN_LENGTH)
+seqid_file_path = path.join(APP_SEQID_PATH, "seqid")
 
 
 def validate_paste(paste: bytes | str) -> None:
@@ -24,7 +26,7 @@ def validate_paste(paste: bytes | str) -> None:
 
 def load_seq_id() -> int:
     try:
-        with open(APP_SEQID_PATH, "r") as f:
+        with open(seqid_file_path, "r") as f:
             return int(f.read())
     except ValueError:
         # TODO: add logging.
@@ -35,7 +37,7 @@ def load_seq_id() -> int:
 
 def write_seq_id(seq_id: int):
     try:
-        with open(APP_SEQID_PATH, "w") as f:
+        with open(seqid_file_path, "w") as f:
             f.write(str(seq_id))
     except:
         # TODO: add logging.

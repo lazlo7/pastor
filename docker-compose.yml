@@ -9,11 +9,13 @@ services:
       - "seqid:${APP_SEQID_PATH}"
     env_file:
       - .env
+    depends_on:
+      - postgres
   
   postgres:
     image: postgres:latest
-    ports:
-      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
@@ -21,3 +23,4 @@ services:
 
 volumes:
   seqid:
+  postgres_data:

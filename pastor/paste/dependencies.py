@@ -14,6 +14,8 @@ async def valid_paste_id(paste_id: str,
     Returns the paste's text and the given id if a paste with this id exists, 
     otherwise raises an HTTPException.
     """
+    # We specifically choose not validate paste_id using fastapi's Path() validation,
+    # since it would raise exceptions different from 404, which we want to avoid.
     # Note that the fact that paste_id contains only base64 characters
     # is already checked by the sqids.decode() function.
     if len(paste_id) < SQIDS_ID_MIN_LENGTH:

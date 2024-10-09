@@ -16,6 +16,12 @@ async def favicon():
     return FileResponse("pastor/static/img/favicon.jpg")
 
 
+@app.get("/legal")
+async def legal(req: Request):
+    t = get_templates()
+    return t.TemplateResponse("legal.html", {"request": req})
+
+
 @app.exception_handler(404)
 async def custom_404_handler(req: Request, _):
     t = get_templates()

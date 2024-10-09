@@ -4,7 +4,7 @@ Simple text-sharing service
 
 ## Configuration
 Create a `.env` file in the root directory and set environment variables:
-- `APP_WEB_PORT`: port for the web server (used only by docker)
+- `APP_WEB_PORT`: port for the web server
 - `POSTGRES_HOST`: host address of the postgres database
 - `POSTGRES_PORT`: port of the postgres database
 - `POSTGRES_USER`: user of the postgres database

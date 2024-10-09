@@ -1,19 +1,21 @@
 from pastor.paste.models import Paste
-from pastor.paste.utils import get_next_paste_id
-from pastor.paste.dependencies import sqids
+from pastor.paste.seqid import Seqid
 from sqlalchemy.orm import Session
 
 
+seqid = Seqid()
+
+
 async def create_paste(text: str, db: Session) -> str:
-    id_, encoded_id = get_next_paste_id()
+    id_, encoded_id = await seqid.get_next(db)
     paste = Paste(id=id_, text=text)
     db.add(paste)
     return encoded_id
     
 
 async def get_paste(paste_id: str, db: Session) -> str | None:
-    decoded_id = sqids.decode(paste_id)
-    if len(decoded_id) != 1:
+    decoded_id = seqid.decode(paste_id)
+    if decoded_id is None:
         return None
-    paste = db.query(Paste).get(decoded_id[0])
+    paste = db.query(Paste).get(decoded_id)
     return paste.text if paste else None

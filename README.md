@@ -5,7 +5,6 @@ Simple text-sharing service
 ## Configuration
 Create a `.env` file in the root directory and set environment variables:
 - `APP_WEB_PORT`: port for the web server (used only by docker)
-- `APP_SEQID_PATH`: path to the directory where sequence id (metadata) file will be stored
 - `POSTGRES_HOST`: host address of the postgres database
 - `POSTGRES_PORT`: port of the postgres database
 - `POSTGRES_USER`: user of the postgres database
@@ -22,9 +21,7 @@ Other values may also need to be changed depending on how you want to run the ap
 Simply run `docker compose up` in the root directory.
 
 ### poetry
-Set `APP_SEQID_STORAGE` to whatever directory you want to store the metadata file.  
 Configure postgres variables to match your local setup.  
-
 Initialize poetry with `poetry install` and run the app with `poetry run start`.
 
 ### pip

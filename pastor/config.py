@@ -3,7 +3,6 @@ from starlette.config import Config
 
 config = Config(".env")
 
-APP_SEQID_PATH    = config("APP_SEQID_PATH", default="/tmp/seqid")
 POSTGRES_HOST     = config("POSTGRES_HOST", default="localhost")
 POSTGRES_PORT     = config("POSTGRES_PORT", default="8001")
 POSTGRES_USER     = config("POSTGRES_USER", default="pastor")

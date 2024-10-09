@@ -17,38 +17,50 @@
                 <span<>[</span><a href="/legal" class="link royalblue">terms & privacy</a><span>]</span>
             </div>
             <form id="createPasteForm" action="/" method="POST">
-                <span>[</span><a class="link royalblue" onclick="createPaste()">create paste</a><span>]</span>
+                <span>[</span><span class="link royalblue" onclick="createPaste()">create paste</span><span>]</span>
             </form>
         </div>
     </div>
     <textarea name="paste" id="paste" placeholder="type text here..."></textarea>
     <script>
-        function createPaste() {
-            const pasteText = document.getElementById('paste').value; 
-            fetch('/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain; charset=utf-8',
-                },
-                body: pasteText
-            })
-            .then(response => {
-                // check for 5xx server errors
+        async function createPaste() {
+            try {
+                const pasteText = document.getElementById('paste').value; 
+
+                if (!pasteText) {
+                    throw new Error('paste is empty');
+                }
+
+                if (pasteText.length > 4096) {
+                    throw new Error('paste is too long');
+                }
+
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain; charset=utf-8',
+                    },
+                    body: pasteText
+                });
+
                 if (response.status >= 500) {
                     throw new Error('internal server error, try again later');
                 }
-                return response.json()
-            })
-            .then(data => {
+
+                const data = await response.json();
+
                 if (data.detail) {
                     throw new Error(data.detail);
                 }
-                if(!data.paste_id) {
+
+                if (!data.paste_id) {
                     throw new Error('internal server error, try again later');
                 }
+
                 window.location.href = `/${data.paste_id}`;
-            })
-            .catch(error => displayError(error));
+            } catch (error) {
+                displayError(error);
+            }
         }
         function displayError(error) {
             const errorContainer = document.getElementById('error-container');

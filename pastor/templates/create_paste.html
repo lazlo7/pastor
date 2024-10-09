@@ -8,10 +8,10 @@
     <title>pastor: create paste</title>
 </head>
 <body>
+    <div id="error-container"></div>
     <div class="header">
         <h1 class="title royalblue">[<a class="link title" href="/">pastor</a>]</h1>
         <div class="header-actions">
-            <span id="error-container"></span>
             <form id="createPasteForm" action="/" method="POST">
                 <span>[</span><a class="link royalblue" onclick="createPaste()">create paste</a><span>]</span>
             </form>
@@ -47,7 +47,12 @@
             .catch(error => displayError(error));
         }
         function displayError(error) {
-            document.getElementById('error-container').innerText = error.message;
+            const errorContainer = document.getElementById('error-container');
+            errorContainer.textContent = error.message;
+            errorContainer.style.display = 'block';
+            setTimeout(() => {
+                errorContainer.style.display = 'none';
+            }, 5000);
         }
     </script>
 </body>

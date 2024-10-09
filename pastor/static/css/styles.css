@@ -36,6 +36,14 @@ body {
     text-decoration: none;
 }
 #error-container {
+    display: none;
+    position: fixed;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    z-index: 1;
+    text-align: center;
     color: red;
     font-weight: bolder;
 }
